@@ -39,5 +39,6 @@ jobs:
       - name: Deploy new version to Arweave
         run: |
           echo -e "{ \"image_tag\":\"${{ github.sha }}\" }" > deploy-vars.json
+          ls operations
           levant render -var-file=deploy-vars.json -out deploy-live-ar.hcl operations/frostor.xyz-ar-live.hcl
           nomad job run deploy-live-ar.hcl
