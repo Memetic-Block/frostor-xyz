@@ -75,8 +75,8 @@ job "deploy-frostor.xyz-ar-live" {
       }
 
       resources {
-        cpu    = 1024
-        memory = 1024
+        cpu    = 4096
+        memory = 4096
       }
     }
   }
