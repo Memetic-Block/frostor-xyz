@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+/* Berkeley Mono font faces */
+@font-face {
+  font-family: 'Berkeley Mono';
+  font-style: normal;
+  font-weight: 100 500;
+  src:
+    url('/fonts/BerkeleyMono-Regular.woff') format('woff'),
+    url('/fonts/BerkeleyMono-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Berkeley Mono';
+  font-style: normal;
+  font-weight: bold;
+  src:
+    url('/fonts/BerkeleyMono-Bold.woff') format('woff'),
+    url('/fonts/BerkeleyMono-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Berkeley Mono';
+  font-style: italic;
+  font-weight: 100 500;
+  src:
+    url('/fonts/BerkeleyMono-Italic.woff') format('woff'),
+    url('/fonts/BerkeleyMono-Italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Berkeley Mono';
+  font-style: italic;
+  font-weight: bold;
+  src:
+    url('/fonts/BerkeleyMono-BoldItalic.woff') format('woff'),
+    url('/fonts/BerkeleyMono-BoldItalic.woff2') format('woff2');
+}
+
+/* Theme configuration using Tailwind v4 CSS variables */
+@theme {
+  --color-primary: #1a1a1a;
+  --color-secondary: #333333;
+  --color-gray-text: #666666;
+  --color-surface: #f5f5f5;
+  --color-background: #ffffff;
+  --color-foreground: #1a1a1a;
+  
+  --font-family-mono: 'Berkeley Mono', monospace;
+  --font-family-sans: 'Berkeley Mono', monospace;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  font-family: 'Berkeley Mono', monospace;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Component classes */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--color-foreground);
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--color-foreground);
+  text-decoration: none;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.btn:hover {
+  background-color: var(--color-foreground);
+  color: var(--color-background);
+}
+
+.container-page {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container-page {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-page {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
