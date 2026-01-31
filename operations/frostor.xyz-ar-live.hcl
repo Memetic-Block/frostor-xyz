@@ -37,6 +37,9 @@ job "deploy-frostor.xyz-ar-live" {
         echo "Building frostor.xyz static files"
         npm run build
 
+        echo "Debug dist"
+        ls -la ./dist
+
         echo "Deploying static site to Arweave"
         npm run deploy:arweave
         EOF
