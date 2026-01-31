@@ -12,6 +12,16 @@
           <p>
             Total Staked: <span class="font-medium text-foreground">{{ totalStaked !== null ? formatStake(totalStaked) + ' $ARIO' : '...' }}</span>
           </p>
+          <p class="pt-1">
+            <a 
+              href="https://network-portal.app/#/gateways/36Ar8VmyC7YS7JGaep9ca2ANjLABETTpxSeA7WOV45Y" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-blue-400 hover:text-blue-300 hover:underline transition-colors"
+            >
+              Stake your $ARIO with frostor.xyz →
+            </a>
+          </p>
         </div>
       </div>
 
