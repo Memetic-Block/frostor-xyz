@@ -1,0 +1,43 @@
+name: build-and-deploy-frostor.xyz-live
+on:
+  push:
+    tags: 
+      - "v*"
+env:
+  IMAGE_NAME: frostor.xyz
+jobs:
+  build-and-push-frostor-xyz-live:
+    runs-on: self-hosted
+    permissions:
+      contents: read
+    steps:
+      - name: git-checkout-frostor.xyz
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: docker-build-frostor.xyz
+        run: |
+          docker build . \
+            --file Dockerfile \
+            --tag $IMAGE_NAME \
+            --label "runnumber=${GITHUB_RUN_ID}" \
+            --build-arg NUXT_PUBLIC_COMMIT_HASH=${{ github.sha }}
+      - name: docker-push-frostor.xyz
+        run: |
+          IMAGE_ID=$CONTAINER_REGISTRY_ADDR/${{ github.repository_owner }}/$IMAGE_NAME
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          VERSION=$(echo ${{ github.ref_name }} | sed -e 's/^v//')
+          docker tag $IMAGE_NAME $IMAGE_ID:${{ github.sha }}
+          docker push $IMAGE_ID:${{ github.sha }}
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+  deploy-frostor-xyz-live-arweave:
+    needs: build-and-push-frostor-xyz-live
+    runs-on: self-hosted
+    steps:
+      - name: Deploy new version to Arweave
+        run: |
+          echo -e "{ \"image_tag\":\"${{ github.sha }}\" }" > deploy-vars.json
+          levant render -var-file=deploy-vars.json -out deploy-live-ar.hcl operations/frostor.xyz-ar-live.hcl
+          nomad job run deploy-live-ar.hcl

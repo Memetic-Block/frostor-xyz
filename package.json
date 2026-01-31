@@ -1,5 +1,5 @@
 {
-  "name": "frostor.io",
+  "name": "frostor-xyz",
   "version": "0.1.0",
   "description": "",
   "keywords": [],
@@ -16,12 +16,12 @@
     "deploy:static": "npx wrangler pages deploy /usr/src/app/dist --project-name=$PROJECT_NAME"
   },
   "dependencies": {
+    "@ar.io/sdk": "^3.8.4",
+    "@unhead/vue": "^1.11.14",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0",
-    "@unhead/vue": "^1.11.14"
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@ar.io/sdk": "^3.8.4",
     "@ardrive/turbo-sdk": "^1.23.0",
     "@tailwindcss/vite": "^4.0.0",
     "@types/node": "^22.10.5",
