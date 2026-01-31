@@ -1,4 +1,4 @@
-# frostor.io
+# frostor-xyz
 
 ## Install
 ```bash
@@ -7,10 +7,9 @@ $ npm install
 
 ## Run
 ```bash
-# serve with hot reload at localhost:3000
+# serve with hot reload at localhost:5173
 $ npm run dev
 
-# build for production and launch server
+# static build for production
 $ npm run build
-$ npm run start
 ```
