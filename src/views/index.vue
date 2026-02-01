@@ -8,6 +8,7 @@
         <!-- Gateway info -->
         <div class="mt-4 ml-1 text-xs md:text-sm text-gray-text space-y-1">
           <p>Arweave Gateway</p>
+          <p>Status: <span :class="isOnline ? 'text-green-500' : 'text-red-500'" class="font-medium">{{ isOnline ? 'Online' : 'Offline' }}</span></p>
           <p>Release: <span class="font-medium text-foreground">{{ gatewayInfo?.release ?? '...' }}</span></p>
           <p>
             Total Staked: <span class="font-medium text-foreground">{{ totalStaked !== null ? formatStake(totalStaked) + ' $ARIO' : '...' }}</span>
@@ -65,6 +66,10 @@ const loading = ref(true)
 const totalStaked = computed(() => {
   if (operatorStake.value === null || delegatedStake.value === null) return null
   return operatorStake.value + delegatedStake.value
+})
+
+const isOnline = computed(() => {
+  return gatewayInfo.value !== null && !loading.value
 })
 
 const formatStake = (mARIO: number) => {
