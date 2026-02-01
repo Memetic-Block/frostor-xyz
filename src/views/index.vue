@@ -8,7 +8,7 @@
         <!-- Gateway info -->
         <div class="mt-4 ml-1 text-xs md:text-sm text-gray-text space-y-1">
           <p>Arweave Gateway</p>
-          <p>Status: <span :class="isOnline ? 'text-green-500' : 'text-red-500'" class="font-medium">{{ isOnline ? 'Online' : 'Offline' }}</span></p>
+          <p>Status: <span :class="statusClass" class="font-medium">{{ statusText }}</span></p>
           <p>Release: <span class="font-medium text-foreground">{{ gatewayInfo?.release ?? '...' }}</span></p>
           <p>
             Total Staked: <span class="font-medium text-foreground">{{ totalStaked !== null ? formatStake(totalStaked) + ' $ARIO' : '...' }}</span>
@@ -59,17 +59,29 @@ interface GatewayInfo {
 const FROSTOR_GATEWAY_ADDRESS = '36Ar8VmyC7YS7JGaep9ca2ANjLABETTpxSeA7WOV45Y'
 
 const gatewayInfo = ref<GatewayInfo | null>(null)
+const gatewayStatus = ref<'loading' | 'online' | 'offline'>('loading')
 const operatorStake = ref<number | null>(null)
 const delegatedStake = ref<number | null>(null)
-const loading = ref(true)
 
 const totalStaked = computed(() => {
   if (operatorStake.value === null || delegatedStake.value === null) return null
   return operatorStake.value + delegatedStake.value
 })
 
-const isOnline = computed(() => {
-  return gatewayInfo.value !== null && !loading.value
+const statusText = computed(() => {
+  switch (gatewayStatus.value) {
+    case 'loading': return '...'
+    case 'online': return 'Online'
+    case 'offline': return 'Offline'
+  }
+})
+
+const statusClass = computed(() => {
+  switch (gatewayStatus.value) {
+    case 'loading': return 'text-gray-text'
+    case 'online': return 'text-green-500'
+    case 'offline': return 'text-red-500'
+  }
 })
 
 const formatStake = (mARIO: number) => {
@@ -79,12 +91,22 @@ const formatStake = (mARIO: number) => {
 }
 
 onMounted(async () => {
+  // Fetch gateway info from ar-io endpoint to determine status
   try {
-    // Fetch gateway info from ar-io endpoint
     const infoResponse = await fetch('https://frostor.xyz/ar-io/info')
-    gatewayInfo.value = await infoResponse.json()
+    if (infoResponse.ok) {
+      gatewayInfo.value = await infoResponse.json()
+      gatewayStatus.value = 'online'
+    } else {
+      gatewayStatus.value = 'offline'
+    }
+  } catch (error) {
+    console.error('Failed to fetch gateway info:', error)
+    gatewayStatus.value = 'offline'
+  }
 
-    // Fetch stake info from ARIO contract
+  // Fetch stake info from ARIO contract (separate from status)
+  try {
     const ario = ARIO.mainnet()
     const gateway = await ario.getGateway({ address: FROSTOR_GATEWAY_ADDRESS })
     if (gateway) {
@@ -92,9 +114,7 @@ onMounted(async () => {
       delegatedStake.value = gateway.totalDelegatedStake
     }
   } catch (error) {
-    console.error('Failed to fetch gateway info:', error)
-  } finally {
-    loading.value = false
+    console.error('Failed to fetch stake info:', error)
   }
 })
 
