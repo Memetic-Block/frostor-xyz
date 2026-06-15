@@ -1,35 +1,15 @@
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    tailwindcss(),
-    nodePolyfills({
-      include: ['crypto', 'stream', 'buffer', 'process', 'util'],
-      globals: {
-        Buffer: true,
-        process: true,
-      },
-    }),
-  ],
+  plugins: [tailwindcss()],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
     },
   },
-  // @ts-expect-error vite-ssg extends vite config
-  ssgOptions: {
-    script: 'async',
-    formatting: 'minify',
-    crittersOptions: {
-      reduceInlineStyles: false,
-    },
-    onFinished() {
-      console.log('SSG build complete!')
-    },
+  build: {
+    target: 'es2022',
   },
 })
