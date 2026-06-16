@@ -25,7 +25,8 @@ single build-time-only finding.
 
 ## Prerequisites
 
-[Bun](https://bun.sh/) (the repo is locked with `bun.lock`).
+- [Bun](https://bun.sh/) (the repo is locked with `bun.lock`)
+- Node.js `^20.19.0 || >=22.12.0` — required by Vite 8
 
 ## Develop
 
